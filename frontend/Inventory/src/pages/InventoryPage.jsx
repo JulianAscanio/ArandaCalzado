@@ -4,12 +4,14 @@ import SearchBar from "../components/SearchBar";
 import CategoryFilters from "../components/CategoryFilters";
 import InventoryTable from "../components/InventoryTable";
 import MovemmentModal from "../components/MovementModal";
-import { materials } from "../data/inventoryData";
+import { useInventory } from "../context/InventoryContext";
 
 export default function InventoryPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("Todos");
   const [selectedMaterial, setSelectedMaterial] = useState(null);
+
+  const {materials} = useInventory();
 
   const filteredMaterials = useMemo(() => {
     return materials.filter((item) => {
@@ -22,7 +24,7 @@ export default function InventoryPage() {
 
       return matchesSearch && matchesCategory;
     });
-  }, [search, activeCategory]);
+  }, [materials, search, activeCategory]);
 
   return (
     <div style={{ padding: "30px" }}>

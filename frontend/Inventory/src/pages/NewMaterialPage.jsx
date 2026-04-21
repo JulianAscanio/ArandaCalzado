@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useInventory } from "../context/InventoryContext";
 
 export default function NewMaterialPage() {
   const navigate = useNavigate();
+  const { addMaterial } = useInventory();
 
   const [form, setForm] = useState({
     name: "",
@@ -23,7 +25,7 @@ export default function NewMaterialPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if(!form.name || form.unit || form.category || form.stock || form.minStock){
+    if(!form.name || !form.unit || !form.category || !form.stock || !form.minStock){
       alert("Por favor, completa todos los campos.");
       return;
     }
@@ -34,7 +36,7 @@ export default function NewMaterialPage() {
       minStock: Number(form.minStock),
     };
 
-    console.log("Nuevo material:", newMaterial);
+    addMaterial(newMaterial);
     alert("Material creado exitosamente.");
     navigate("/inventario");
   };
@@ -163,9 +165,9 @@ const inputStyle = {
 };
 
 const rowStyle = {
-  display: "flex",
+  display: "grid",
   gap: "12px",
-  marginTop: "24px",
+  gridTemplateColumns: "1fr 1fr",
 };
 
 const actionsStyle = {

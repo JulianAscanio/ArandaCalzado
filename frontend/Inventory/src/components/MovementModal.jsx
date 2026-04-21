@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useInventory } from "../context/InventoryContext";
 
 export default function MovemmentModal({ material, onClose }) {
+    const { registerMovement } = useInventory();
+
     const [movementType, setMovementType] = useState("entrada");
     const [quantity, setQuantity] = useState("");
     const [reason, setReason] = useState("");
@@ -8,20 +11,27 @@ export default function MovemmentModal({ material, onClose }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        const numericQuantity = Number(quantity);
+
         if (!quantity || Number(quantity) <= 0) {
             alert("la cantidad debe ser mayor a 0");
             return;
         }
 
-        const payload = {
+        if (movementType === "salida" && numericQuantity > material.stock) {
+            alert("No hay stock suficiente para registrar la salida")
+            return;
+        }
+
+        registerMovement({
             materialId: material.id,
             materialName: material.name,
             movementType,
-            quantity: Number(quantity),
+            quantity: numericQuantity,
             reason,
-        };
+        });
 
-        console.log("Movimiento registrado:", payload)
+        alert("Movimiento registrado correctamente")
         onClose();
     };
 
@@ -118,7 +128,6 @@ const labelStyle = {
     display: "block",
     marginBottom: "8px",
     marginTop: "16px",
-    color: "#6f5d56",
     fontWeight: "600",
 };
 
