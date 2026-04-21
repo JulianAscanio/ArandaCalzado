@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { materials as initialMaterials } from "../data/inventoryData";
 
-const InventoryContext = createContext();
+export const InventoryContext = createContext();
 
 export function InventoryProvider({ children }) {
     const [materials, setMaterials] = useState(initialMaterials);
@@ -79,7 +79,7 @@ export function InventoryProvider({ children }) {
     };*/
 
     return (
-        <InventoryContext.Provider value={{ materials, movements, addMaterial, updateStock }}>
+        <InventoryContext.Provider value={{ materials, movements, addMaterial, registerMovement }}>
             {children}
         </InventoryContext.Provider>
     );
