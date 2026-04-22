@@ -3,15 +3,16 @@ import { Link } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
 import CategoryFilters from "../components/CategoryFilters";
 import InventoryTable from "../components/InventoryTable";
-import MovemmentModal from "../components/MovementModal";
+import MovementModal from "../components/MovementModal";
 import { useInventory } from "../context/InventoryContext";
+import AppLayout from "../../../shared/layout/AppLayout";
 
 export default function InventoryPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("Todos");
   const [selectedMaterial, setSelectedMaterial] = useState(null);
 
-  const {materials} = useInventory();
+  const { materials } = useInventory();
 
   const filteredMaterials = useMemo(() => {
     return materials.filter((item) => {
@@ -27,7 +28,7 @@ export default function InventoryPage() {
   }, [materials, search, activeCategory]);
 
   return (
-    <div style={{ padding: "30px" }}>
+    <AppLayout title="Inventario">
       <div
         style={{
           display: "flex",
@@ -71,12 +72,12 @@ export default function InventoryPage() {
       <InventoryTable items={filteredMaterials} onOpenModal={setSelectedMaterial} />
       {
         selectedMaterial && (
-          <MovemmentModal
+          <MovementModal
             material={selectedMaterial}
             onClose={() => setSelectedMaterial(null)}
           />
         )
       }
-    </div>
+    </AppLayout>
   );
 }

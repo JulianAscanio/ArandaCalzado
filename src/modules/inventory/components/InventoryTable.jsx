@@ -1,3 +1,5 @@
+import StatusBar from './StatusBar';
+
 export default function InventoryTable({ items, onOpenModal }) {
   return (
     <table
@@ -35,8 +37,12 @@ export default function InventoryTable({ items, onOpenModal }) {
               <td style={tdStyle}>
                 {item.minStock} {item.unit}
               </td>
-              <td style={tdStyle}>
-                {lowStock ? "Stock bajo" : "Disponible"}
+              <td style={{ ...tdStyle, minWidth: '150px' }}>
+                <StatusBar 
+                  current={item.stock} 
+                  minimum={item.minStock}
+                  unit={item.unit}
+                />
               </td>
               <td style={tdStyle}>{item.lastEntry}</td>
                <td style={tdStyle}>

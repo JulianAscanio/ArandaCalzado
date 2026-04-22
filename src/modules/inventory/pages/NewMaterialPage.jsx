@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useInventory } from "../context/InventoryContext";
+import AppLayout from "../../../shared/layout/AppLayout";
 
 export default function NewMaterialPage() {
   const navigate = useNavigate();
@@ -42,7 +43,8 @@ export default function NewMaterialPage() {
   };
 
   return (
-    <div style={pageStyle}>
+    <AppLayout title="Gestión de Inventario">
+      <div style={pageStyle}>
       <div style={cardStyle}>
         <h1 style={{ marginTop: 0, marginBottom: "8px" }}>Registrar nuevo material</h1>
         <p style={{ color: "#6f5d56", marginBottom: "24px" }}>
@@ -134,6 +136,7 @@ export default function NewMaterialPage() {
         </form>
       </div>
     </div>
+    </AppLayout>
   );
 }
 
