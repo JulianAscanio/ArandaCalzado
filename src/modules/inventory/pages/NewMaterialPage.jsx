@@ -26,7 +26,7 @@ export default function NewMaterialPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if(!form.name || !form.unit || !form.category || !form.stock || !form.minStock){
+    if(!form.name.trim() === "" || !form.unit.trim() === "" || !form.category.trim() === "" || !form.stock.trim() === "" || !form.minStock.trim() === ""){
       alert("Por favor, completa todos los campos.");
       return;
     }
@@ -83,6 +83,7 @@ export default function NewMaterialPage() {
                 value={form.category}
                 onChange={handleChange}
               >
+                <option value="" disabled>Seleccione una categoría</option>
                 <option value="Cuero">Cuero</option>
                 <option value="Suelas">Suelas</option>
                 <option value="Adhesivos">Adhesivos</option>

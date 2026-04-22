@@ -1,7 +1,12 @@
-export default function StatusBar({ current, minimum, unit }) {
-  const percentage = Math.min((current / minimum) * 100, 100);
-  const isLow = current < minimum;
-  const isCritical = current < minimum * 0.3;
+export default function StatusBar({ current, minimum }) {
+
+  const currentValue = Number(current)|| 0;
+  const minimumValue = Number(minimum) || 0;
+
+
+  const percentage = minimumValue > 0 ? Math.min((currentValue / minimumValue) * 100, 100):0;
+  const isLow = minimumValue > 0 && currentValue < minimumValue;
+  const isCritical = minimumValue > 0 && currentValue < minimumValue * 0.3;
 
   const getColor = () => {
     if (isCritical) return '#e74c3c';

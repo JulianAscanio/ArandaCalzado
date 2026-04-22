@@ -7,9 +7,13 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  background: #f8f7f5;
-  color: #2c2620;
+  background: #f4efea;
+  color: #2d1f20;
   line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
 }
 
 html {
@@ -71,52 +75,129 @@ html {
   .search-bar {
     width: 100%;
   }
-
-  .app-main {
-    padding: 16px;
-  }
-
-  .sidebar {
-    width: 100%;
-    padding: 16px;
-    justify-content: flex-start;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  h1 { font-size: 24px; }
-  h2 { font-size: 20px; }
-  h3 { font-size: 18px; }
 }
 
 .app-shell {
   min-height: 100vh;
   display: flex;
-  background: #f8f7f5;
 }
 
 .app-main {
   flex: 1;
-  padding: 32px;
-  overflow-y: auto;
+  padding: 24px 36px;
 }
 
 .app-content {
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
 }
 
 .sidebar {
-  width: 260px;
-  background: linear-gradient(135deg, #1a0b10 0%, #2d1620 100%);
+  width: 290px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #25000f 0%, #170009 100%);
   color: white;
-  padding: 28px 18px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
-  position: relative;
-  transition: all 0.3s ease;
+  padding: 22px 18px;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+}
+
+.sidebar-top {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 8px 12px;
+}
+
+.brand-logo {
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  background: #c52b47;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.brand-logo.small {
+  width: 38px;
+  height: 38px;
+  font-size: 14px;
+}
+
+.brand-text h2 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.brand-text p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #d2bcc3;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 0 4px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0px 16px;
+  border-radius: 14px;
+  color: #f5dde4;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.sidebar-link:hover {
+  background: rgba(145, 89, 89, 0.06);
+  color: white;
+}
+
+.sidebar-link.active {
+  background: linear-gradient(90deg, #b1223a 0%, #c42a46 100%);
+  color: white;
+  box-shadow: 0 10px 24px rgba(177, 34, 58, 0.35);
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-user strong {
+  display: block;
+  font-size: 15px;
+  color: white;
+}
+
+.sidebar-user p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #d2bcc3;
 }
 
 /* Componentes globales */
@@ -173,19 +254,41 @@ button:active {
 }
 
 /* Headings */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 600;
   line-height: 1.3;
   margin-bottom: 12px;
   color: #1a1410;
 }
 
-h1 { font-size: 28px; }
-h2 { font-size: 24px; }
-h3 { font-size: 20px; }
-h4 { font-size: 18px; }
-h5 { font-size: 16px; }
-h6 { font-size: 14px; }
+h1 {
+  font-size: 28px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 18px;
+}
+
+h5 {
+  font-size: 16px;
+}
+
+h6 {
+  font-size: 14px;
+}
 
 /* Scrollbar mejorado */
 ::-webkit-scrollbar {
@@ -205,4 +308,3 @@ h6 { font-size: 14px; }
 ::-webkit-scrollbar-thumb:hover {
   background: #b9a49a;
 }
-
