@@ -1,0 +1,17 @@
+import { Routes, Route, Navigate } from "react-router-dom";
+import { inventoryRoutes } from "../../modules/inventory/routers/inventoryRouters";
+//import { ordersRoutes } from "../../modules/orders/routers/ordersRouters";
+import Login from "../../modules/auth/pages/Login";
+import ProtectedRoute from "./ProtectedRoute";
+
+export default function AppRouter() {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Navigate to="/inventario" />} />
+      <Route element={<ProtectedRoute />}>
+        {inventoryRoutes}
+      </Route>
+    </Routes>
+  );
+}
