@@ -7,6 +7,7 @@ export const inventoryRoutes = (
     <>
         <Route path="/inventario" element={<InventoryPage />} />
         <Route path="/nuevo-material" element={<NewMaterialPage />} />
+        <Route path="/editar-material/:id" element={<NewMaterialPage />} />
         <Route path="/movimientos" element={<MovementPage />} />
     </>
 )

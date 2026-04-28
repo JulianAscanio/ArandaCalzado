@@ -308,3 +308,47 @@ h6 {
 ::-webkit-scrollbar-thumb:hover {
   background: #b9a49a;
 }
+
+/* Estilos botones de acciones tabla */
+.icon-action-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.icon-action-button svg {
+  display: block;
+}
+
+.icon-action-button--move {
+  background: #ecadad;
+  color: #681827;
+  border-color: #cfaeb5;
+}
+
+.icon-action-button--move:hover {
+  background: #cfb2b8;
+  color: #681827;
+  box-shadow: 0 6px 16px rgba(126, 34, 51, 0.16);
+  transform: translateY(-1px);
+}
+
+.icon-action-button--menu {
+  background: #d9d9d9;
+  color: #4b4b4b;
+  border-color: #c9c9c9;
+}
+
+.icon-action-button--menu:hover {
+  background: #cdcdcd;
+  color: #2e2e2e;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}

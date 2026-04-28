@@ -9,7 +9,7 @@ export function InventoryProvider({ children }) {
         const savedMovements = localStorage.getItem("inventory-movements");
         return savedMovements ? JSON.parse(savedMovements) : [];
     });
-    
+
     const { token, logout } = useAuth();
 
     useEffect(() => {
@@ -52,7 +52,7 @@ export function InventoryProvider({ children }) {
                 },
                 body: JSON.stringify(newMaterial)
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
                 setMaterials((prev) => [...prev, data]);
@@ -80,11 +80,33 @@ export function InventoryProvider({ children }) {
         }
     };
 
+    const updateMaterial = async (id, updatedMaterial) => {
+        const response = await fetch(`http://localhost:8000/api/inventario/materiales/${id}/`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(updatedMaterial)
+        });
+        if (!response.ok) {
+            const errorData = await response.text();
+            throw new Error(JSON.stringify({ errorData }));
+        }
+
+        const data = await response.json();
+        setMaterials((prev) =>
+            prev.map((material) => (material.id === id ? data : material))
+        );
+
+        return data;
+    };
+
     const registerMovement = async ({ materialId, materialName, movementType, quantity, reason }) => {
-        
+
         const material = materials.find((m) => m.id === materialId);
         if (!material) return;
-        
+
         let newStock = material.stock;
         if (movementType === "entrada") {
             newStock = material.stock + quantity;
@@ -116,7 +138,7 @@ export function InventoryProvider({ children }) {
                     reason,
                     date: new Date().toLocaleString(),
                 };
-        
+
                 setMovements((prev) => [newMovement, ...prev]);
             }
         } catch (error) {
@@ -132,32 +154,8 @@ export function InventoryProvider({ children }) {
         setMovements([]);
     }
 
-    /*const updateStock = ({ materialId, movementType, quantity }) => {
-        setMaterials((prev) =>
-            prev.map((material) => {
-                if (material.id !== materialId) return material;
-
-                let newStock = material.stock;
-
-                if (movementType === "entrada") {
-                    newStock = material.stock + quantity;
-                }
-
-                if (movementType === "salida") {
-                    newStock = material.stock - quantity;
-                }
-
-                return {
-                    ...material,
-                    stock: newStock,
-                    lastEntry: "Hoy",
-                };
-            })
-        );
-    };*/
-
     return (
-        <InventoryContext.Provider value={{ materials, movements, addMaterial, deleteMaterial, registerMovement, resetInvetoryData }}>
+        <InventoryContext.Provider value={{ materials, movements, addMaterial, deleteMaterial, updateMaterial, registerMovement, resetInvetoryData }}>
             {children}
         </InventoryContext.Provider>
     );
