@@ -1,11 +1,11 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../modules/auth/context/AuthContext";
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen }) {
   const { logout } = useAuth();
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${!isOpen ? "collapsed" : ""}`}>
       <div className="sidebar-top">
         <div className="brand-block">
           <div className="brand-logo">AC</div>

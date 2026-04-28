@@ -85,6 +85,7 @@ html {
 .app-main {
   flex: 1;
   padding: 24px 36px;
+  transition: all 0.3s ease;
 }
 
 .app-content {
@@ -92,21 +93,60 @@ html {
 }
 
 .sidebar {
-  width: 290px;
+ width: 290px;
   min-height: 100vh;
-  background: linear-gradient(180deg, #25000f 0%, #170009 100%);
-  color: white;
+  background: linear-gradient(180deg, #22000d 0%, #160008 100%);
+  color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 22px 18px;
+  padding: 28px 18px 22px;
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+  transition: width 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: 0;
+  padding: 0;
+  opacity: 0;
 }
 
 .sidebar-top {
   display: flex;
   flex-direction: column;
   gap: 34px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hamburger-btn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  background: #e8ddd3;
+  color: #4b3a35;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamburger-btn:hover {
+  background: #ddd0c6;
 }
 
 .brand-block {

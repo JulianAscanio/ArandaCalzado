@@ -1,12 +1,16 @@
+import { useState } from "react";
 import Sidebar from "./Sidebar";
 import Topbar from "./TopBar";
 
 export default function AppLayout({ children, title = "Panel" }) {
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+
     return (
         <div className="app-shell">
-            <Sidebar />
-            <main className="app-main">
-                <Topbar title={title} />
+            <Sidebar isOpen={sidebarOpen} />
+
+            <main className={ `app-main ${sidebarOpen ? "expanded" : ""}` }>
+                <Topbar title={title} onToggleSidebar={() => setSidebarOpen((prev) => !prev)} />
                 <div className="app-content">
                     {children}
                 </div>
