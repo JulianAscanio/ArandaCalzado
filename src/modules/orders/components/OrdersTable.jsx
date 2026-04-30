@@ -68,7 +68,7 @@ export default function OrdersTable({ items, onOpenModal }) {
             <td style={tdStyle}>
               <strong>{formatCurrency(item.total)}</strong>
             </td>
-            <td style={tdStyle}>(item.status)</td>
+            <td style={tdStyle}>{item.status}</td>
 
             <td style={tdStyle}>
               <div style={actionsWrapperStyle}>
