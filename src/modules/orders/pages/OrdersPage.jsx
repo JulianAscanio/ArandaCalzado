@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "../components/SearchBar";
-import CategoryFilters from "../components/CategoryFilters";
+import StatusFilters from "../components/StatusFilters";
 import OrdersTable from "../components/OrdersTable";
 import StageModal from "../components/StageModal";
 import { useOrders } from "../context/OrdersContext";
@@ -9,7 +9,7 @@ import AppLayout from "../../../shared/layout/AppLayout";
 
 export default function OrdersPage() {
   const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState("Todos");
+  const [activeStatus, setActiveStatus] = useState("Todos");
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   const { orders } = useOrders();
@@ -20,12 +20,12 @@ export default function OrdersPage() {
         item.clientName.toLowerCase().includes(search.toLowerCase()) ||
         item.model.toLowerCase().includes(search.toLowerCase());
 
-      const matchesCategory =
-        activeCategory === "Todos" || item.category === activeCategory;
+      const matchesStatus =
+        activeStatus === "Todos" || item.Status === activeStatus;
 
-      return matchesSearch && matchesCategory;
+      return matchesSearch && matchesStatus;
     });
-  }, [orders, search, activeCategory]);
+  }, [orders, search, activeStatus]);
 
   return (
     <AppLayout title="Pedidos">
@@ -63,9 +63,9 @@ export default function OrdersPage() {
       </div>
 
       <div style={{ marginBottom: "20px" }}>
-        <CategoryFilters
-          activeCategory={activeCategory}
-          setActiveCategory={setActiveCategory}
+        <StatusFilters
+          activeStatus={activeStatus}
+          setActiveStatus={setActiveStatus}
         />
       </div>
 
