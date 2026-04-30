@@ -26,12 +26,12 @@ export default function Sidebar({ isOpen }) {
           </NavLink>
 
           <NavLink
-            to="/ordenes"
+            to="/pedidos"
             className={({ isActive }) =>
               isActive ? "sidebar-link active" : "sidebar-link"
             }
           >
-            Órdenes
+            Pedidos
           </NavLink>
         </nav>
       </div>
