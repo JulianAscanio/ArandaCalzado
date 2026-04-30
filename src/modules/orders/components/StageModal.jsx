@@ -43,17 +43,17 @@ export default function MovemmentModal({ order, onClose }) {
                     <div style={{ display: "flex", gap: "12px", marginBottom: "24px" }}>
                     <button
                             type="button"
-                            onClick={() => setStageName("salida")}
-                            onMouseEnter={() => setHoveredButton("salida")}
+                            onClick={() => setStageName("pendiente")}
+                            onMouseEnter={() => setHoveredButton("pendiente")}
                             onMouseLeave={() => setHoveredButton(null)}
                             style={{
                                 ...typeButtonStyle,
                                 backgroundColor:
-                                    stageName === "salida" ? "#b1223a" : hoveredButton === "salida" ? "#f0f0f0" : "#f5f5f5",
-                                color: stageName === "salida" ? "white" : "#2d1f20",
-                                borderColor: stageName === "salida" ? "#b1223a" : "#e8dcd2",
-                                boxShadow: stageName === "salida" ? "0 4px 12px rgba(177, 34, 58, 0.2)" : "0 2px 8px rgba(0, 0, 0, 0.04)",
-                                fontWeight: stageName === "salida" ? "600" : "500",
+                                    stageName === "pendiente" ? "#b1223a" : hoveredButton === "pendiente" ? "#f0f0f0" : "#f5f5f5",
+                                color: stageName === "pendiente" ? "white" : "#2d1f20",
+                                borderColor: stageName === "pendiente" ? "#b1223a" : "#e8dcd2",
+                                boxShadow: stageName === "pendiente" ? "0 4px 12px rgba(177, 34, 58, 0.2)" : "0 2px 8px rgba(0, 0, 0, 0.04)",
+                                fontWeight: stageName === "pendiente" ? "600" : "500",
                             }}
                         >
                             Pendiente
@@ -61,17 +61,17 @@ export default function MovemmentModal({ order, onClose }) {
 
                         <button
                             type="button"
-                            onClick={() => setStageName("salida")}
-                            onMouseEnter={() => setHoveredButton("salida")}
+                            onClick={() => setStageName("en producción")}
+                            onMouseEnter={() => setHoveredButton("en producción")}
                             onMouseLeave={() => setHoveredButton(null)}
                             style={{
                                 ...typeButtonStyle,
                                 backgroundColor:
-                                    stageName === "salida" ? "#f39c12" : hoveredButton === "salida" ? "#f0f0f0" : "#f5f5f5",
-                                color: stageName === "salida" ? "white" : "#2d1f20",
-                                borderColor: stageName === "salida" ? "#f39c12" : "#e8dcd2",
-                                boxShadow: stageName === "salida" ? "0 4px 12px rgba(243, 156, 18, 0.2)" : "0 2px 8px rgba(0, 0, 0, 0.04)",
-                                fontWeight: stageName === "salida" ? "600" : "500",
+                                    stageName === "en producción" ? "#f39c12" : hoveredButton === "en producción" ? "#f0f0f0" : "#f5f5f5",
+                                color: stageName === "en producción" ? "white" : "#2d1f20",
+                                borderColor: stageName === "en producción" ? "#f39c12" : "#e8dcd2",
+                                boxShadow: stageName === "en producción" ? "0 4px 12px rgba(243, 156, 18, 0.2)" : "0 2px 8px rgba(0, 0, 0, 0.04)",
+                                fontWeight: stageName === "en producción" ? "600" : "500",
                             }}
                         >
                             En Producción
@@ -79,17 +79,17 @@ export default function MovemmentModal({ order, onClose }) {
 
                         <button
                             type="button"
-                            onClick={() => setStageName("salida")}
-                            onMouseEnter={() => setHoveredButton("salida")}
+                            onClick={() => setStageName("terminado")}
+                            onMouseEnter={() => setHoveredButton("terminado")}
                             onMouseLeave={() => setHoveredButton(null)}
                             style={{
                                 ...typeButtonStyle,
                                 backgroundColor:
-                                    stageName === "salida" ? "#0066cc" : hoveredButton === "salida" ? "#f0f0f0" : "#f5f5f5",
-                                color: stageName === "salida" ? "white" : "#2d1f20",
-                                borderColor: stageName === "salida" ? "#0066cc" : "#e8dcd2",
-                                boxShadow: stageName === "salida" ? "0 4px 12px rgba(0, 102, 204, 0.2)" : "0 2px 8px rgba(0, 0, 0, 0.04)",
-                                fontWeight: stageName === "salida" ? "600" : "500",
+                                    stageName === "terminado" ? "#0066cc" : hoveredButton === "terminado" ? "#f0f0f0" : "#f5f5f5",
+                                color: stageName === "terminado" ? "white" : "#2d1f20",
+                                borderColor: stageName === "terminado" ? "#0066cc" : "#e8dcd2",
+                                boxShadow: stageName === "terminado" ? "0 4px 12px rgba(0, 102, 204, 0.2)" : "0 2px 8px rgba(0, 0, 0, 0.04)",
+                                fontWeight: stageName === "terminado" ? "600" : "500",
                             }}
                         >
                             Terminado
@@ -97,17 +97,17 @@ export default function MovemmentModal({ order, onClose }) {
 
                         <button
                             type="button"
-                            onClick={() => setStageName("entrada")}
-                            onMouseEnter={() => setHoveredButton("entrada")}
+                            onClick={() => setStageName("enviado")}
+                            onMouseEnter={() => setHoveredButton("enviado")}
                             onMouseLeave={() => setHoveredButton(null)}
                             style={{
                                 ...typeButtonStyle,
                                 backgroundColor:
-                                    stageName === "entrada" ? "#0f9d58" : hoveredButton === "entrada" ? "#f0f0f0" : "#f5f5f5",
-                                color: stageName === "entrada" ? "white" : "#2d1f20",
-                                borderColor: stageName === "entrada" ? "#0f9d58" : "#e8dcd2",
-                                boxShadow: stageName === "entrada" ? "0 4px 12px rgba(15, 157, 88, 0.2)" : "0 2px 8px rgba(0, 0, 0, 0.04)",
-                                fontWeight: stageName === "entrada" ? "600" : "500",
+                                    stageName === "enviado" ? "#0f9d58" : hoveredButton === "enviado" ? "#f0f0f0" : "#f5f5f5",
+                                color: stageName === "enviado" ? "white" : "#2d1f20",
+                                borderColor: stageName === "enviado" ? "#0f9d58" : "#e8dcd2",
+                                boxShadow: stageName === "enviado" ? "0 4px 12px rgba(15, 157, 88, 0.2)" : "0 2px 8px rgba(0, 0, 0, 0.04)",
+                                fontWeight: stageName === "enviado" ? "600" : "500",
                             }}
                         >
                             Enviado
