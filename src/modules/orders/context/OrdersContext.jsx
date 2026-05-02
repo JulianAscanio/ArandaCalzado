@@ -5,6 +5,8 @@ export const OrdersContext = createContext();
 
 export function OrdersProvider({ children }) {
     const [orders, setOrders] = useState([]);
+    const [customers, setCustomers] = useState([]);
+    const [products, setProducts] = useState([]);
     const [stages, setStages] = useState(() => {
         const savedStages = localStorage.getItem("orders-stages");
         return savedStages ? JSON.parse(savedStages) : [];
@@ -20,21 +22,32 @@ export function OrdersProvider({ children }) {
 
     const fetchOrders = async () => {
         try {
-            const response = await fetch("http://localhost:8000/api/pedidos/ordenes/", {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-            if (response.status === 401) {
+            const headers = { "Authorization": `Bearer ${token}` };
+            const [ordersRes, customersRes, productsRes] = await Promise.all([
+                fetch("http://localhost:8000/api/pedidos/ordenes/", { headers }),
+                fetch("http://localhost:8000/api/usuarios/customers/", { headers }),
+                fetch("http://localhost:8000/api/inventario/productos/", { headers })
+            ]);
+
+            if (ordersRes.status === 401) {
                 logout();
                 return;
             }
-            if (response.ok) {
-                const data = await response.json();
+
+            if (ordersRes.ok) {
+                const data = await ordersRes.json();
                 setOrders(data);
             }
+            if (customersRes.ok) {
+                const data = await customersRes.json();
+                setCustomers(data);
+            }
+            if (productsRes.ok) {
+                const data = await productsRes.json();
+                setProducts(data);
+            }
         } catch (error) {
-            console.error("Error fetching orders:", error);
+            console.error("Error fetching orders data:", error);
         }
     };
 
@@ -56,17 +69,21 @@ export function OrdersProvider({ children }) {
             if (response.ok) {
                 const data = await response.json();
                 setOrders((prev) => [...prev, data]);
+                return data;
             } else {
-                console.error("Error creating order", await response.text());
+                const errorText = await response.text();
+                console.error("Error creating order", errorText);
+                throw new Error("Failed to create order");
             }
         } catch (error) {
             console.error("Error posting order:", error);
+            throw error;
         }
     };
 
     const deleteOrder = async (id) => {
         try {
-            const response = await fetch("http://localhost:8000/api/pedidos/ordenes/${id}/", {
+            const response = await fetch(`http://localhost:8000/api/pedidos/ordenes/${id}/`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -81,7 +98,7 @@ export function OrdersProvider({ children }) {
     };
 
     const updateOrder = async (id, updatedOrder) => {
-        const response = await fetch("http://localhost:8000/api/pedidos/ordenes/${id}/", {
+        const response = await fetch(`http://localhost:8000/api/pedidos/ordenes/${id}/`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -113,7 +130,7 @@ export function OrdersProvider({ children }) {
         }
 
         try {
-            const response = await fetch("http://localhost:8000/api/pedidos/ordenes/${orderId}/", {
+            const response = await fetch(`http://localhost:8000/api/pedidos/ordenes/${orderId}/`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -150,7 +167,7 @@ export function OrdersProvider({ children }) {
     }
 
     return (
-        <OrdersContext.Provider value={{ orders, stages, addOrder, deleteOrder, updateOrder, registerStage, resetOrdersData }}>
+        <OrdersContext.Provider value={{ orders, customers, products, stages, addOrder, deleteOrder, updateOrder, registerStage, resetOrdersData }}>
             {children}
         </OrdersContext.Provider>
     );

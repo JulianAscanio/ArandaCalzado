@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AppLayout from "../../../shared/layout/AppLayout";
 import { useOrders } from "../context/OrdersContext";
@@ -7,41 +7,50 @@ export default function NewOrderPage() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { orders, addOrder, updateOrder } = useOrders();
+  const { orders, customers, products, addOrder, updateOrder } = useOrders();
 
   const isEditMode = Boolean(id);
 
   const [form, setForm] = useState({
-    clientName: "",
-    clientPhone: "",
-    clientAdress: "",
-    model: "",
-    color: "",
-    date: new Date().toISOString().split("T")[0],
+    customer: "",
+    product: "",
+    quantity: 1,
     total: "",
-    status: "",
+    status: "pending",
+    additional_info: "",
   });
 
   useEffect(() => {
-    if (isEditMode) {
+    if (isEditMode && orders.length > 0) {
       const orderToEdit = orders.find(
         (item) => String(item.id) === String(id)
       );
 
       if (orderToEdit) {
         setForm({
-          clientName: orderToEdit.clientName || "",
-          clientPhone: orderToEdit.clientPhone || "",
-          clientAdress: orderToEdit.clientAdress || "",
-          model: orderToEdit.model || "",
-          color: orderToEdit.color || "",
-          date: orderToEdit.date || new Date().toISOString().split("T")[0],
-          total: orderToEdit.total ?? "",
-          status: orderToEdit.status || "",
+          customer: orderToEdit.customer || (orderToEdit.customer_detail?.user?.id) || "",
+          product: orderToEdit.items?.[0]?.product || (orderToEdit.items?.[0]?.product_detail?.id) || "",
+          quantity: orderToEdit.items?.[0]?.quantity || 1,
+          total: orderToEdit.total_amount ?? "",
+          status: orderToEdit.status || "pending",
+          additional_info: orderToEdit.additional_info || "",
         });
       }
     }
   }, [id, isEditMode, orders]);
+
+  // Calculate total automatically when product or quantity changes
+  useEffect(() => {
+    if (form.product && form.quantity) {
+      const selectedProduct = products.find(p => String(p.id) === String(form.product));
+      if (selectedProduct) {
+        setForm(prev => ({
+          ...prev,
+          total: (selectedProduct.price * prev.quantity).toString()
+        }));
+      }
+    }
+  }, [form.product, form.quantity, products]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,28 +65,30 @@ export default function NewOrderPage() {
     e.preventDefault();
 
     if (
-      form.clientName.trim() === "" ||
-      form.clientPhone.trim() === "" ||
-      form.clientAdress.trim() === "" ||
-      form.model.trim() === "" ||
-      form.color.trim() === "" ||
-      form.date.trim() === "" ||
-      form.total === "" ||
-      form.status.trim() === ""
+      !form.customer ||
+      !form.product ||
+      !form.quantity ||
+      !form.total ||
+      !form.status
     ) {
       alert("Completa todos los campos obligatorios");
       return;
     }
 
+    const selectedProduct = products.find(p => String(p.id) === String(form.product));
+
     const payload = {
-      clientName: form.clientName,
-      clientPhone: form.clientPhone,
-      clientAdress: form.clientAdress,
-      model: form.model,
-      color: form.color,
-      date: form.date,
-      total: Number(form.total),
+      customer: Number(form.customer),
       status: form.status,
+      total_amount: Number(form.total),
+      additional_info: form.additional_info,
+      items: [
+        {
+          product: Number(form.product),
+          quantity: Number(form.quantity),
+          unit_price: selectedProduct ? selectedProduct.price : 0
+        }
+      ]
     };
 
     try {
@@ -112,38 +123,20 @@ export default function NewOrderPage() {
           <form onSubmit={handleSubmit}>
             <div style={rowStyle}>
               <div>
-                <label style={labelStyle}>Nombre del Cliente</label>
-                <input
+                <label style={labelStyle}>Cliente</label>
+                <select
                   style={inputStyle}
-                  type="text"
-                  name="clientName"
-                  value={form.clientName}
+                  name="customer"
+                  value={form.customer}
                   onChange={handleChange}
-                />
-              </div>
-
-              <div>
-                <label style={labelStyle}>Teléfono del Cliente</label>
-                <input
-                  style={inputStyle}
-                  type="text"
-                  name="clientPhone"
-                  value={form.clientPhone}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-            <div style={rowStyle}>
-              <div>
-                <label style={labelStyle}>Dirección del Cliente</label>
-                <input
-                  style={inputStyle}
-                  type="text"
-                  name="clientAdress"
-                  value={form.clientAdress}
-                  onChange={handleChange}
-                />
+                >
+                  <option value="">Selecciona un cliente</option>
+                  {customers?.map(customer => (
+                    <option key={customer.id} value={customer.id}>
+                      {customer.user?.first_name} {customer.user?.last_name} ({customer.user?.username})
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
@@ -154,35 +147,40 @@ export default function NewOrderPage() {
                   value={form.status}
                   onChange={handleChange}
                 >
-                  <option selected value="Pendiente">Pendiente</option>
-                  <option value="En Producción">En Producción</option>
-                  <option value="Terminado">Terminado</option>
-                  <option value="Enviado">Enviado</option>
+                  <option value="pending">Pendiente</option>
+                  <option value="in_production">En Producción</option>
+                  <option value="finished">Terminado</option>
+                  <option value="sent">Enviado</option>
                 </select>
               </div>
             </div>
 
             <div style={rowStyle}>
               <div>
-                <label style={labelStyle}>Modelo</label>
-                <input
+                <label style={labelStyle}>Producto</label>
+                <select
                   style={inputStyle}
-                  type="text"
-                  name="model"
-                  placeholder="Ej: Cuero vegano"
-                  value={form.model}
+                  name="product"
+                  value={form.product}
                   onChange={handleChange}
-                />
+                >
+                  <option value="">Selecciona un producto</option>
+                  {products?.map(product => (
+                    <option key={product.id} value={product.id}>
+                      {product.name} (Talla: {product.size}) - ${product.price}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
-                <label style={labelStyle}>Color</label>
+                <label style={labelStyle}>Cantidad</label>
                 <input
                   style={inputStyle}
-                  type="text"
-                  name="color"
-                  placeholder="Ej: Negro"
-                  value={form.color}
+                  type="number"
+                  min="1"
+                  name="quantity"
+                  value={form.quantity}
                   onChange={handleChange}
                 />
               </div>
@@ -195,19 +193,21 @@ export default function NewOrderPage() {
                   style={inputStyle}
                   type="number"
                   min="0"
+                  step="0.01"
                   name="total"
                   value={form.total}
                   onChange={handleChange}
+                  readOnly
                 />
               </div>
 
               <div>
-                <label style={labelStyle}>Fecha</label>
+                <label style={labelStyle}>Información Adicional</label>
                 <input
                   style={inputStyle}
-                  type="date"
-                  name="date"
-                  value={form.date}
+                  type="text"
+                  name="additional_info"
+                  value={form.additional_info}
                   onChange={handleChange}
                 />
               </div>

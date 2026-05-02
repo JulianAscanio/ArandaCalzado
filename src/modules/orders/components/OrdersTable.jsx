@@ -3,6 +3,16 @@ import { Link } from "react-router-dom";
 import { MoreVertical, Pencil, Trash2, ArrowUpDown } from "lucide-react";
 import { useOrders } from "../context/OrdersContext";
 
+const getStatusLabel = (status) => {
+  const map = {
+    pending: "Pendiente",
+    in_production: "En Producción",
+    finished: "Terminado",
+    sent: "Enviado"
+  };
+  return map[status] || status;
+};
+
 export default function OrdersTable({ items, onOpenModal }) {
   const { deleteOrder } = useOrders();
   const [openMenuId, setOpenMenuId] = useState(null);
@@ -21,6 +31,11 @@ export default function OrdersTable({ items, onOpenModal }) {
       minimumFractionDigits: 0
     }).format(value);
   };
+
+  const formatDate = (isoString) => {
+    if (!isoString) return "";
+    return new Date(isoString).toLocaleDateString();
+  }
 
   return (
     <table
@@ -46,78 +61,89 @@ export default function OrdersTable({ items, onOpenModal }) {
       </thead>
 
       <tbody>
-        {items.map((item) => (
-          <tr key={item.id}>
-            <td style={tdStyle}>#{item.id}</td>
-            <td style={tdStyle}>
-              <strong>{item.clientName}</strong>
-            </td>
-            <td style={tdStyle}>
-              <div style={{ fontSize: "13px", color: "#555" }}>
-                <div>📞 {item.clientPhone}</div>
-                <div>📍 {item.clientAddress}</div>
-              </div>
-            </td>
-            <td style={tdStyle}>
-              <div style={{ fontSize: "13px" }}>
-                <div><strong>Modelo:</strong> {item.model}</div>
-                <div><strong>Color:</strong> {item.color} | <strong>Talla:</strong> {item.size}</div>
-              </div>
-            </td>
-            <td style={tdStyle}>{item.date}</td>
-            <td style={tdStyle}>
-              <strong>{formatCurrency(item.total)}</strong>
-            </td>
-            <td style={tdStyle}>{item.status}</td>
+        {items.map((item) => {
+          const customer = item.customer_detail;
+          const user = customer?.user || {};
+          const firstItem = item.items?.[0];
+          const product = firstItem?.product_detail;
 
-            <td style={tdStyle}>
-              <div style={actionsWrapperStyle}>
-                <button
-                  onClick={() => onOpenModal(item)}
-                  className="icon-action-button icon-action-button--move"
-                  title="Cambio de Estado"
-                  aria-label="Cambio de Estado"
-                >
-                  <ArrowUpDown size={20} strokeWidth={2.6} />
-                </button>
+          return (
+            <tr key={item.id}>
+              <td style={tdStyle}>#{item.id}</td>
+              <td style={tdStyle}>
+                <strong>{user.first_name || user.username || "Desconocido"} {user.last_name || ""}</strong>
+              </td>
+              <td style={tdStyle}>
+                <div style={{ fontSize: "13px", color: "#555" }}>
+                  <div>📞 {customer?.phone || "N/A"}</div>
+                  <div>📍 {customer?.address || "N/A"}</div>
+                </div>
+              </td>
+              <td style={tdStyle}>
+                <div style={{ fontSize: "13px" }}>
+                  {product ? (
+                    <>
+                      <div><strong>Producto:</strong> {product.name} (x{firstItem.quantity})</div>
+                      <div><strong>Talla:</strong> {product.size} | <strong>P.U:</strong> {formatCurrency(firstItem.unit_price)}</div>
+                    </>
+                  ) : "Sin productos"}
+                </div>
+              </td>
+              <td style={tdStyle}>{formatDate(item.created_at)}</td>
+              <td style={tdStyle}>
+                <strong>{formatCurrency(item.total_amount)}</strong>
+              </td>
+              <td style={tdStyle}>{getStatusLabel(item.status)}</td>
 
-                <div style={{ position: "relative" }}>
+              <td style={tdStyle}>
+                <div style={actionsWrapperStyle}>
                   <button
-                    onClick={() =>
-                      setOpenMenuId(openMenuId === item.id ? null : item.id)
-                    }
-                    className="icon-action-button icon-action-button--menu"
-                    title="Más opciones"
-                    aria-label="Más opciones"
+                    onClick={() => onOpenModal(item)}
+                    className="icon-action-button icon-action-button--move"
+                    title="Cambio de Estado"
+                    aria-label="Cambio de Estado"
                   >
-                    <MoreVertical size={20} strokeWidth={2.8} />
+                    <ArrowUpDown size={20} strokeWidth={2.6} />
                   </button>
 
-                  {openMenuId === item.id && (
-                    <div style={dropdownStyle}>
-                      <Link
-                        to={`/pedidos/editar-orden/${item.id}`}
-                        style={dropdownItemStyle}
-                        onClick={() => setOpenMenuId(null)}
-                      >
-                        <Pencil size={16} />
-                        Editar
-                      </Link>
+                  <div style={{ position: "relative" }}>
+                    <button
+                      onClick={() =>
+                        setOpenMenuId(openMenuId === item.id ? null : item.id)
+                      }
+                      className="icon-action-button icon-action-button--menu"
+                      title="Más opciones"
+                      aria-label="Más opciones"
+                    >
+                      <MoreVertical size={20} strokeWidth={2.8} />
+                    </button>
 
-                      <button
-                        onClick={() => handleDelete(item.id)}
-                        style={dropdownDeleteStyle}
-                      >
-                        <Trash2 size={16} />
-                        Eliminar
-                      </button>
-                    </div>
-                  )}
+                    {openMenuId === item.id && (
+                      <div style={dropdownStyle}>
+                        <Link
+                          to={`/pedidos/editar-orden/${item.id}`}
+                          style={dropdownItemStyle}
+                          onClick={() => setOpenMenuId(null)}
+                        >
+                          <Pencil size={16} />
+                          Editar
+                        </Link>
+
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          style={dropdownDeleteStyle}
+                        >
+                          <Trash2 size={16} />
+                          Eliminar
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </td>
-          </tr>
-        ))}
+              </td>
+            </tr>
+          );
+        })}
         {items.length === 0 && (
           <tr>
             <td colSpan="8" style={{ textAlign: "center", padding: "30px", color: "#888" }}>

@@ -14,14 +14,28 @@ export default function OrdersPage() {
 
   const { orders } = useOrders();
 
+  const getStatusLabel = (status) => {
+    const map = {
+      pending: "Pendiente",
+      in_production: "En Producción",
+      finished: "Terminado",
+      sent: "Enviado"
+    };
+    return map[status] || status;
+  };
+
   const filteredOrders = useMemo(() => {
     return orders.filter((item) => {
-      const matchesSearch =
-        item.clientName.toLowerCase().includes(search.toLowerCase()) ||
-        item.model.toLowerCase().includes(search.toLowerCase());
+      const customerName = (item.customer_detail?.user?.first_name || item.customer_detail?.user?.username || "").toLowerCase();
+      const productName = (item.items?.[0]?.product_detail?.name || "").toLowerCase();
 
+      const matchesSearch =
+        customerName.includes(search.toLowerCase()) ||
+        productName.includes(search.toLowerCase());
+
+      const statusLabel = getStatusLabel(item.status);
       const matchesStatus =
-        activeStatus === "Todos" || item.Status === activeStatus;
+        activeStatus === "Todos" || statusLabel === activeStatus;
 
       return matchesSearch && matchesStatus;
     });
