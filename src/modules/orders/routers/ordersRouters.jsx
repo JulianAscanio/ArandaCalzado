@@ -6,5 +6,6 @@ export const ordersRoutes = (
     <>
         <Route path="/pedidos" element={<OrdersPage />} />
         <Route path="/nuevo-pedido" element={<NewOrderPage />} />
+        <Route path="/pedidos/editar-orden/:id" element={<NewOrderPage />} />
     </>
 );

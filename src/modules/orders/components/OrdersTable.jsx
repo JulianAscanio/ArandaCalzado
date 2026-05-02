@@ -96,7 +96,7 @@ export default function OrdersTable({ items, onOpenModal }) {
                   {openMenuId === item.id && (
                     <div style={dropdownStyle}>
                       <Link
-                        to={`/pedido/editar-orden/${item.id}`}
+                        to={`/pedidos/editar-orden/${item.id}`}
                         style={dropdownItemStyle}
                         onClick={() => setOpenMenuId(null)}
                       >
