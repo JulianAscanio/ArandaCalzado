@@ -22,7 +22,7 @@ export default function InventoryTable({ items, onOpenModal }) {
         borderCollapse: "collapse",
         background: "white",
         borderRadius: "12px",
-        overflow: "hidden",
+        overflow: "visible",
       }}
     >
       <thead>
