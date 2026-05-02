@@ -73,7 +73,7 @@ export default function OrdersPage() {
       {
         selectedOrder && (
           <StageModal
-            material={selectedOrder}
+            order={selectedOrder}
             onClose={() => setSelectedOrder(null)}
           />
         )
