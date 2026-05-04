@@ -125,8 +125,9 @@ export function InventoryProvider({ children }) {
             });
 
             if (response.ok) {
+                const today = new Date().toISOString().split("T")[0];
                 setMaterials((prev) =>
-                    prev.map((m) => m.id === materialId ? { ...m, stock: newStock, lastEntry: "Hoy" } : m)
+                    prev.map((m) => m.id === materialId ? { ...m, stock: newStock, lastEntry: today } : m)
                 );
 
                 const newMovement = {
